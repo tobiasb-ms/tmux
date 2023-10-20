@@ -781,6 +781,7 @@ tty_term_string_i(struct tty_term *term, enum tty_code_code code, int a)
 	s = tparm((char *)x, a, 0, 0, 0, 0, 0, 0, 0, 0);
 #endif
 	if (s == NULL) {
+		log_debug("TOBIASB: tty_term_string_i");
 		log_debug("could not expand %s", tty_term_codes[code].name);
 		return ("");
 	}
@@ -800,6 +801,7 @@ tty_term_string_ii(struct tty_term *term, enum tty_code_code code, int a, int b)
 	s = tparm((char *)x, a, b, 0, 0, 0, 0, 0, 0, 0);
 #endif
 	if (s == NULL) {
+		log_debug("TOBIASB: tty_term_string_ii");
 		log_debug("could not expand %s", tty_term_codes[code].name);
 		return ("");
 	}
@@ -820,6 +822,7 @@ tty_term_string_iii(struct tty_term *term, enum tty_code_code code, int a,
 	s = tparm((char *)x, a, b, c, 0, 0, 0, 0, 0, 0);
 #endif
 	if (s == NULL) {
+		log_debug("TOBIASB: tty_term_string_iii");
 		log_debug("could not expand %s", tty_term_codes[code].name);
 		return ("");
 	}
@@ -839,6 +842,7 @@ tty_term_string_s(struct tty_term *term, enum tty_code_code code, const char *a)
 	s = tparm((char *)x, (long)a, 0, 0, 0, 0, 0, 0, 0, 0);
 #endif
 	if (s == NULL) {
+		log_debug("TOBIASB: tty_term_string_s");
 		log_debug("could not expand %s", tty_term_codes[code].name);
 		return ("");
 	}
@@ -849,19 +853,40 @@ const char *
 tty_term_string_ss(struct tty_term *term, enum tty_code_code code,
     const char *a, const char *b)
 {
+	log_debug("TOBIASB: tty_term_string_ss: term->name: '%s'", term->name);
+	log_debug("TOBIASB: tty_term_string_ss: code: '%d'", code);
+	log_debug("TOBIASB: tty_term_string_ss: a: '%s'", a);
+	log_debug("TOBIASB: tty_term_string_ss: b: '%s'", b);
 	const char	*x = tty_term_string(term, code), *s;
 
+	if (x == NULL) {
+		log_debug("TOBIASB: tty_term_string_ss: x: 'NULL'");
+	 } else {
+		for (int x_idx = 0; x[x_idx] != '\0'; x_idx++) {
+			log_debug("TOBIASB: tty_term_string_ss: x[%d]: '%d'", x_idx, x[x_idx]);
+		}
+
+		// log_debug("TOBIASB: tty_term_string_ss: x[0]: '%d'", x[0]);
+		// log_debug("TOBIASB: tty_term_string_ss: x: '%s'", s);
+	 }
+
 #if defined(HAVE_TIPARM_S)
+	log_debug("TOBIASB: tty_term_string_ss: calling tiparm_s");
 	s = tiparm_s(2, 3, x, a, b);
 #elif defined(HAVE_TIPARM)
+	log_debug("TOBIASB: tty_term_string_ss: calling tiparm");
 	s = tiparm(x, a, b);
 #else
+	log_debug("TOBIASB: tty_term_string_ss: calling tparm");
 	s = tparm((char *)x, (long)a, (long)b, 0, 0, 0, 0, 0, 0, 0);
 #endif
 	if (s == NULL) {
+		log_debug("TOBIASB: tty_term_string_ss: s: 'NULL'");
 		log_debug("could not expand %s", tty_term_codes[code].name);
 		return ("");
 	}
+
+	log_debug("TOBIASB: tty_term_string_ss: s: '%s'", s);
 	return (s);
 }
 
